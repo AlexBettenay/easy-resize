@@ -39,8 +39,8 @@ class ResizableContainer extends Component<ResizableContainerProps, ResizableCon
   constructor(props: ResizableContainerProps) {
     super(props);
     this.state = {
-        width: props.initialWidth || 200,
-        height: props.initialHeight || 200,
+        width: Math.max((props.initialWidth || 200), (props.minWidth || 200)),
+        height: Math.max((props.initialHeight || 200), (props.minHeight || 200)),
     };
     this.containerRef = React.createRef();
     this.moveHandlerRef = null;
@@ -121,27 +121,30 @@ class ResizableContainer extends Component<ResizableContainerProps, ResizableCon
         {children}
         {allowedDirections?.map((direction) => {
           let dynamicCornerHandleStyle: CSSProperties = {};
-          switch (direction) {
-            case 'nw':
-              dynamicCornerHandleStyle = { transform: 'rotate(315deg)' };
-              break;
-            case 'ne':
-              dynamicCornerHandleStyle = { transform: 'rotate(45deg)' };
-              break;
-            case 'sw':
-              dynamicCornerHandleStyle = { transform: 'rotate(225deg)' };
-              break;
-            case 'se':
-              dynamicCornerHandleStyle = { transform: 'rotate(135deg)' };
-              break;
-            default:
-              break;
-          }
+          if (cornerResizeHandle) {
+            switch (direction) {
+              case 'nw':
+                dynamicCornerHandleStyle = { transform: 'rotate(315deg)' };
+                break;
+              case 'ne':
+                dynamicCornerHandleStyle = { transform: 'rotate(45deg)' };
+                break;
+              case 'sw':
+                dynamicCornerHandleStyle = { transform: 'rotate(225deg)' };
+                break;
+              case 'se':
+                dynamicCornerHandleStyle = { transform: 'rotate(135deg)' };
+                break;
+              default:
+                break;
+            }
+        }
 
           return (
             <div
               key={direction}
               className={`easy-resize-handle-container easy-resize-handle-container-${direction}`}
+              style={dynamicCornerHandleStyle}
               onMouseDown={(e) => {
                 e.preventDefault();
                 this.moveHandlerRef = this.handleMouseMove(direction);
@@ -149,7 +152,7 @@ class ResizableContainer extends Component<ResizableContainerProps, ResizableCon
               }}
             >
               {direction.length > 1 && cornerResizeHandle ? (
-                React.cloneElement(cornerResizeHandle as React.ReactElement<any>, { style: dynamicCornerHandleStyle })
+                cornerResizeHandle
               ) : (
                 resizeHandle
               )}

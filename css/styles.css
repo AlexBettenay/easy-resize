@@ -35,45 +35,34 @@
     bottom: 0;
     left: 0;
     cursor: sw-resize;
-    /* transform: rotate(225deg); */
 }
 
 .easy-resize-handle-container-nw {
     top: 0;
     left: 0;
     cursor: nw-resize;
-    /* transform: rotate(315deg); */
 }
 
 .easy-resize-handle-container-ne {
     right: 0;
     top: 0;
     cursor: ne-resize;
-    /* transform: rotate(45deg); */
 }
 
 .easy-resize-handle-container-se {
     right: 0;
     bottom: 0;
     cursor: se-resize;
-    /* transform: rotate(135deg); */
 }
 
 .easy-resize-handle {
     width: 10px;
     height: 10px;
-    background-color: tomato;
-}
-
-.easy-corner-resize-handle {
-    border-left: 10px solid transparent;
-    border-right: 10px solid transparent;
-    border-bottom: 10px solid tomato;
-    transform: translate(-50%, -50%);
+    background-color: "gray";
 }
 
 .parent-container {
     display: flex;
-    position: relative; /* Ensure the container is positioned relative */
-    overflow: visible; /* Allow overflow */
+    position: relative;
+    overflow: visible;
 }
