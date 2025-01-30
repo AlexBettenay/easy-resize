@@ -1,0 +1,79 @@
+.easy-resize-handle-container {
+    position: absolute;
+    display: flex;
+    overflow: visible;
+    z-index: 1000;
+}
+
+.easy-resize-handle-container-w {
+    top: 50%;
+    left: 0;
+    cursor: w-resize;
+    transform: rotate(270deg);
+}
+
+.easy-resize-handle-container-e {
+    top: 50%;
+    right: 0;
+    cursor: e-resize;
+    transform: rotate(90deg);
+}
+
+.easy-resize-handle-container-n {
+    left: 50%;
+    cursor: n-resize;
+}
+
+.easy-resize-handle-container-s {
+    left: 50%;
+    bottom: 0;
+    cursor: s-resize;
+    transform: rotate(180deg);
+}
+
+.easy-resize-handle-container-sw {
+    bottom: 0;
+    left: 0;
+    cursor: sw-resize;
+    /* transform: rotate(225deg); */
+}
+
+.easy-resize-handle-container-nw {
+    top: 0;
+    left: 0;
+    cursor: nw-resize;
+    /* transform: rotate(315deg); */
+}
+
+.easy-resize-handle-container-ne {
+    right: 0;
+    top: 0;
+    cursor: ne-resize;
+    /* transform: rotate(45deg); */
+}
+
+.easy-resize-handle-container-se {
+    right: 0;
+    bottom: 0;
+    cursor: se-resize;
+    /* transform: rotate(135deg); */
+}
+
+.easy-resize-handle {
+    width: 10px;
+    height: 10px;
+    background-color: tomato;
+}
+
+.easy-corner-resize-handle {
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid tomato;
+    transform: translate(-50%, -50%);
+}
+
+.parent-container {
+    display: flex;
+    position: relative; /* Ensure the container is positioned relative */
+    overflow: visible; /* Allow overflow */
+}
