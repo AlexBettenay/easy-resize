@@ -1,10 +1,13 @@
 {
   "name": "easy-resize",
-  "version": "1.0.8",
+  "version": "1.0.13",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "rollup -c",
     "prepare": "npm run build"

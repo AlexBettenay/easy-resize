@@ -58,7 +58,7 @@
 .easy-resize-handle {
     width: 10px;
     height: 10px;
-    background-color: "gray";
+    background-color: gray;
 }
 
 .parent-container {

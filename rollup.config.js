@@ -22,7 +22,10 @@ export default {
       exclude: ['**/__tests__/**']
     }),
     postcss({
-      extensions: ['.css']
+      extensions: ['.css'],
+      minimize: true,
+      inject: true,
+      extract: false
     })
   ],
   external: ['react', 'react-dom']
