@@ -28,8 +28,8 @@ yarn add easy-resize
 | `initialWidth` | `number` | `200` | Initial width of the container |
 | `initialHeight` | `number` | `200` | Initial height of the container |
 | `onChangeFinished` | `(width: number, height: number) => void` | `() => {}` | Callback fired when resizing is complete |
-| `resizeHandle` | `ReactNode` | `<div className="easy-resize-handle" />` | Custom resize handle for edges |
-| `cornerResizeHandle` | `ReactNode` | `undefined` | Custom resize handle for corners |
+| `resizeHandle` | `ReactNode` | `<div style={{width: 10, height: 10, backgroundColor: "gray"}} />` | Custom resize handle for edges |
+| `cornerResizeHandle` | `ReactNode` | `Matches resizeHandle` | Custom resize handle for corners |
 | `sx` | `CSSProperties` | `{}` | Additional CSS styles for the container |
 
 ## Examples
