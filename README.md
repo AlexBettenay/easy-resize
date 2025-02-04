@@ -85,4 +85,3 @@ import ResizableContainer from 'easy-resize'
   </div>
 </ResizableContainer>
 ```
-````
