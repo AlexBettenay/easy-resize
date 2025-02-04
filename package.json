@@ -1,6 +1,6 @@
 {
   "name": "easy-resize",
-  "version": "1.0.14",
+  "version": "1.0.15",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://https://github.com/AlexBettenay/easy-resize.git"
+    "url": "git+https://github.com/AlexBettenay/easy-resize.git"
   },
   "keywords": [
     "react",
