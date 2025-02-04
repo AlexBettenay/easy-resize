@@ -68,8 +68,8 @@ class ResizableContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            width: Math.max((props.initialWidth || 200), (props.minWidth || 200)),
-            height: Math.max((props.initialHeight || 200), (props.minHeight || 200)),
+            width: Math.max((props.initialWidth || 200), (props.minWidth || 0)),
+            height: Math.max((props.initialHeight || 200), (props.minHeight || 0)),
         };
         this.containerRef = React.createRef();
         this.moveHandlerRef = null;
@@ -160,8 +160,8 @@ class ResizableContainer extends Component {
     }
 }
 ResizableContainer.defaultProps = {
-    minWidth: 200,
-    minHeight: 200,
+    minWidth: 0,
+    minHeight: 0,
     initialWidth: 200,
     initialHeight: 200,
     allowedDirections: ['n', 's', 'w', 'e', 'nw', 'ne', 'sw', 'se'],
