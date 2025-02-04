@@ -22,7 +22,7 @@ yarn add easy-resize
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `allowedDirections` | `Array<'n'|'s'|'w'|'e'|'nw'|'ne'|'sw'|'se'>` | `['n','s','w','e','nw','ne','sw','se']` | Directions where resize handles should appear |
+| `allowedDirections` | `Array<'n'\|'s'\|'w'\|'e'\|'nw'\|'ne'\|'sw'\|'se'>` | `['n','s','w','e','nw','ne','sw','se']` | Directions where resize handles should appear |
 | `minWidth` | `number` | `0` | Minimum width the container can be resized to |
 | `minHeight` | `number` | `0` | Minimum height the container can be resized to |
 | `initialWidth` | `number` | `200` | Initial width of the container |
@@ -67,6 +67,10 @@ import ResizableContainer from 'easy-resize'
 
 ### Using Custome Resize Handles
 
+- You can specify custom resize handles.
+- There is a basic resize handle option, and a corner resize handle option, if only the basic resize handle is defined then this will also be used for the corners.
+- Corner resize handles will automatically be rotated to be facing towards the corner.
+
 ```jsx
 import ResizableContainer from 'easy-resize'
 
@@ -79,3 +83,4 @@ import ResizableContainer from 'easy-resize'
   </div>
 </ResizableContainer>
 ```
+````
