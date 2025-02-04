@@ -55,12 +55,6 @@
     cursor: se-resize;
 }
 
-.easy-resize-handle {
-    width: 10px;
-    height: 10px;
-    background-color: gray;
-}
-
 .parent-container {
     display: flex;
     position: relative;

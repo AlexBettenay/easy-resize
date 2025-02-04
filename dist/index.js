@@ -61,7 +61,7 @@ function styleInject(css, ref) {
   }
 }
 
-var css_248z = ".easy-resize-handle-container{display:flex;overflow:visible;position:absolute;z-index:1000}.easy-resize-handle-container-w{cursor:w-resize;left:0;top:50%;transform:rotate(270deg)}.easy-resize-handle-container-e{cursor:e-resize;right:0;top:50%;transform:rotate(90deg)}.easy-resize-handle-container-n{cursor:n-resize;left:50%}.easy-resize-handle-container-s{bottom:0;cursor:s-resize;left:50%;transform:rotate(180deg)}.easy-resize-handle-container-sw{bottom:0;cursor:sw-resize;left:0}.easy-resize-handle-container-nw{cursor:nw-resize;left:0;top:0}.easy-resize-handle-container-ne{cursor:ne-resize;right:0;top:0}.easy-resize-handle-container-se{bottom:0;cursor:se-resize;right:0}.easy-resize-handle{background-color:gray;height:10px;width:10px}.parent-container{display:flex;overflow:visible;position:relative}";
+var css_248z = ".easy-resize-handle-container{display:flex;overflow:visible;position:absolute;z-index:1000}.easy-resize-handle-container-w{cursor:w-resize;left:0;top:50%;transform:rotate(270deg)}.easy-resize-handle-container-e{cursor:e-resize;right:0;top:50%;transform:rotate(90deg)}.easy-resize-handle-container-n{cursor:n-resize;left:50%}.easy-resize-handle-container-s{bottom:0;cursor:s-resize;left:50%;transform:rotate(180deg)}.easy-resize-handle-container-sw{bottom:0;cursor:sw-resize;left:0}.easy-resize-handle-container-nw{cursor:nw-resize;left:0;top:0}.easy-resize-handle-container-ne{cursor:ne-resize;right:0;top:0}.easy-resize-handle-container-se{bottom:0;cursor:se-resize;right:0}.parent-container{display:flex;overflow:visible;position:relative}";
 styleInject(css_248z);
 
 class ResizableContainer extends Component {
@@ -166,7 +166,7 @@ ResizableContainer.defaultProps = {
     initialHeight: 200,
     allowedDirections: ['n', 's', 'w', 'e', 'nw', 'ne', 'sw', 'se'],
     onChangeFinished: () => { },
-    resizeHandle: React.createElement("div", { className: 'easy-resize-handle' }),
+    resizeHandle: React.createElement("div", { style: { width: 10, height: 10, backgroundColor: 'gray' } }),
     cornerResizeHandle: undefined,
 };
 
