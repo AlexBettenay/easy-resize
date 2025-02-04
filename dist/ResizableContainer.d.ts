@@ -23,6 +23,14 @@ export interface ResizableContainerProps {
     /** Initial height in pixels for the container
      * @default 200 */
     initialHeight?: number;
+    /** Locks the aspect ratio of the container when resizing
+     * @default false */
+    lockAspectRatio?: boolean;
+    /** Callback fired when resize operation is started
+     * @param initWidth - TThe width when resizing starts
+     * @param initHeight - The height when resizing starts
+     * @default () => {} */
+    onChangeStarted?: (initWidth: number, initHeight: number) => void;
     /** Callback fired when resize operation is complete
      * @param newWidth - The final width after resizing
      * @param newHeight - The final height after resizing
@@ -48,8 +56,10 @@ declare class ResizableContainer extends Component<ResizableContainerProps, Resi
         minHeight: number;
         initialWidth: number;
         initialHeight: number;
+        lockAspectRatio: boolean;
         allowedDirections: string[];
         onChangeFinished: () => void;
+        onChangeStarted: () => void;
         resizeHandle: React.JSX.Element;
         cornerResizeHandle: undefined;
     };

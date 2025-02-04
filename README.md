@@ -27,6 +27,8 @@ yarn add easy-resize
 | `minHeight` | `number` | `0` | Minimum height the container can be resized to |
 | `initialWidth` | `number` | `200` | Initial width of the container |
 | `initialHeight` | `number` | `200` | Initial height of the container |
+| `lockAspectRatio` | `boolean` | `false` | Locks aspect ratio when resizing |
+| `onChangeStarted` | `(width: number, height: number) => void` | `() => {}` | Callback fired when resizing is started |
 | `onChangeFinished` | `(width: number, height: number) => void` | `() => {}` | Callback fired when resizing is complete |
 | `resizeHandle` | `ReactNode` | `<div style={{width: 10, height: 10, backgroundColor: "gray"}} />` | Custom resize handle for edges |
 | `cornerResizeHandle` | `ReactNode` | `Matches resizeHandle` | Custom resize handle for corners |

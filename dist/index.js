@@ -96,40 +96,48 @@ class ResizableContainer extends Component {
                 return;
             }
             const containerRect = this.containerRef.current.getBoundingClientRect();
+            let width = this.state.width;
+            let height = this.state.height;
+            const aspectRatio = width / height;
             switch (direction) {
                 case 'w':
-                    this.setState({ width: Math.max(this.props.minWidth || 200, containerRect.right - e.clientX) });
+                    width = Math.max(this.props.minWidth || 200, containerRect.right - e.clientX);
+                    this.props.lockAspectRatio && (height = width / aspectRatio);
                     break;
                 case 'e':
-                    this.setState({ width: Math.max(this.props.minWidth || 200, e.clientX - containerRect.left) });
+                    width = Math.max(this.props.minWidth || 200, e.clientX - containerRect.left);
+                    this.props.lockAspectRatio && (height = width / aspectRatio);
                     break;
                 case 'n':
-                    this.setState({ height: Math.max(this.props.minHeight || 200, containerRect.bottom - e.clientY) });
+                    height = Math.max(this.props.minHeight || 200, containerRect.bottom - e.clientY);
+                    this.props.lockAspectRatio && (width = height * aspectRatio);
                     break;
                 case 's':
-                    this.setState({ height: Math.max(this.props.minHeight || 200, e.clientY - containerRect.top) });
+                    height = Math.max(this.props.minHeight || 200, e.clientY - containerRect.top);
+                    this.props.lockAspectRatio && (width = height * aspectRatio);
                     break;
                 case 'nw':
-                    this.setState({ height: Math.max(this.props.minHeight || 200, containerRect.bottom - e.clientY) });
-                    this.setState({ width: Math.max(this.props.minWidth || 200, containerRect.right - e.clientX) });
+                    width = Math.max(this.props.minWidth || 200, containerRect.right - e.clientX);
+                    this.props.lockAspectRatio ? (height = width / aspectRatio) : (height = Math.max(this.props.minHeight || 200, containerRect.bottom - e.clientY));
                     break;
                 case 'ne':
-                    this.setState({ height: Math.max(this.props.minHeight || 200, containerRect.bottom - e.clientY) });
-                    this.setState({ width: Math.max(this.props.minWidth || 200, e.clientX - containerRect.left) });
+                    width = Math.max(this.props.minWidth || 200, e.clientX - containerRect.left);
+                    this.props.lockAspectRatio ? (height = width / aspectRatio) : (height = Math.max(this.props.minHeight || 200, containerRect.bottom - e.clientY));
                     break;
                 case 'sw':
-                    this.setState({ height: Math.max(this.props.minHeight || 200, e.clientY - containerRect.top) });
-                    this.setState({ width: Math.max(this.props.minWidth || 200, containerRect.right - e.clientX) });
+                    width = Math.max(this.props.minWidth || 200, containerRect.right - e.clientX);
+                    this.props.lockAspectRatio ? (height = width / aspectRatio) : (height = Math.max(this.props.minHeight || 200, e.clientY - containerRect.top));
                     break;
                 case 'se':
-                    this.setState({ height: Math.max(this.props.minHeight || 200, e.clientY - containerRect.top) });
-                    this.setState({ width: Math.max(this.props.minWidth || 200, e.clientX - containerRect.left) });
+                    width = Math.max(this.props.minWidth || 200, e.clientX - containerRect.left);
+                    this.props.lockAspectRatio ? (height = width / aspectRatio) : (height = Math.max(this.props.minHeight || 200, e.clientY - containerRect.top));
                     break;
             }
+            this.setState({ width, height });
         };
     }
     render() {
-        const _a = this.props, { children, resizeHandle, cornerResizeHandle, sx, allowedDirections, minWidth, minHeight, initialWidth, initialHeight, onChangeFinished } = _a, other = __rest(_a, ["children", "resizeHandle", "cornerResizeHandle", "sx", "allowedDirections", "minWidth", "minHeight", "initialWidth", "initialHeight", "onChangeFinished"]);
+        const _a = this.props, { children, resizeHandle, cornerResizeHandle, sx, allowedDirections, minWidth, minHeight, initialWidth, initialHeight, lockAspectRatio, onChangeStarted, onChangeFinished } = _a, other = __rest(_a, ["children", "resizeHandle", "cornerResizeHandle", "sx", "allowedDirections", "minWidth", "minHeight", "initialWidth", "initialHeight", "lockAspectRatio", "onChangeStarted", "onChangeFinished"]);
         const { width, height } = this.state;
         return (React.createElement("div", Object.assign({ ref: this.containerRef, className: 'parent-container', style: Object.assign(Object.assign({}, sx), { width, height }) }, other),
             children, allowedDirections === null || allowedDirections === undefined ? undefined :
@@ -152,9 +160,11 @@ class ResizableContainer extends Component {
                     }
                 }
                 return (React.createElement("div", { key: direction, className: `easy-resize-handle-container easy-resize-handle-container-${direction}`, style: dynamicCornerHandleStyle, onMouseDown: (e) => {
+                        var _a, _b;
                         e.preventDefault();
                         this.moveHandlerRef = this.handleMouseMove(direction);
                         document.addEventListener('mousemove', this.moveHandlerRef);
+                        (_b = (_a = this.props).onChangeStarted) === null || _b === undefined ? undefined : _b.call(_a, width, height);
                     } }, direction.length > 1 && cornerResizeHandle ? (cornerResizeHandle) : (resizeHandle)));
             })));
     }
@@ -164,8 +174,10 @@ ResizableContainer.defaultProps = {
     minHeight: 0,
     initialWidth: 200,
     initialHeight: 200,
+    lockAspectRatio: false,
     allowedDirections: ['n', 's', 'w', 'e', 'nw', 'ne', 'sw', 'se'],
     onChangeFinished: () => { },
+    onChangeStarted: () => { },
     resizeHandle: React.createElement("div", { style: { width: 10, height: 10, backgroundColor: 'gray' } }),
     cornerResizeHandle: undefined,
 };
