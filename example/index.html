@@ -10,17 +10,24 @@
         padding-bottom: 250px;
       }
     </style>
-    <script src="https://unpkg.com/react@19.0.0/cjs/react.development.js"></script>
-    <script src="https://unpkg.com/react-dom@19.0.0/cjs/react-dom.development.js"></script>
-    <script type="module" src="/ExamplePage.tsx"></script>
     <title>Easy-Resize</title>
   </head>
   <body>
     <h3>Easy-Resize example</h3>
-    <p>React-resizable is a simple component that you wrap your existing components inside. It
-    gives those components resize handles.
+    <p>This is a test
     </p>
     <hr />
     <div id="root"></div>
+
+    <script src="https://unpkg.com/react@18.0.0/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18.0.0/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script type="text/babel">
+      import ExamplePage from './ExamplePage';
+      
+      const root = ReactDOM.createRoot(document.getElementById('root'));
+      root.render(<ExamplePage />);
+    </script>
   </body>
 </html>
