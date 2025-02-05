@@ -23,11 +23,15 @@
     <script src="https://unpkg.com/react-dom@18.0.0/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-    <script type="text/babel">
-      import ExamplePage from './ExamplePage';
+    <script type="text/babel" data-type="module">
+      import ExamplePage from './ExamplePage.tsx';
       
       const root = ReactDOM.createRoot(document.getElementById('root'));
-      root.render(<ExamplePage />);
+      root.render(
+        <React.StrictMode>
+          <ExamplePage />
+        </React.StrictMode>
+      );
     </script>
   </body>
 </html>
