@@ -61,86 +61,91 @@ function styleInject(css, ref) {
   }
 }
 
-var css_248z = ".easy-resize-handle-container{display:flex;overflow:visible;position:absolute;z-index:1000}.easy-resize-handle-container-w{cursor:w-resize;left:0;top:50%;transform:rotate(270deg)}.easy-resize-handle-container-e{cursor:e-resize;right:0;top:50%;transform:rotate(90deg)}.easy-resize-handle-container-n{cursor:n-resize;left:50%}.easy-resize-handle-container-s{bottom:0;cursor:s-resize;left:50%;transform:rotate(180deg)}.easy-resize-handle-container-sw{bottom:0;cursor:sw-resize;left:0}.easy-resize-handle-container-nw{cursor:nw-resize;left:0;top:0}.easy-resize-handle-container-ne{cursor:ne-resize;right:0;top:0}.easy-resize-handle-container-se{bottom:0;cursor:se-resize;right:0}.parent-container{display:flex;overflow:visible;position:relative}";
+var css_248z = ".easy-resize-handle-container{display:flex;overflow:visible;position:absolute;touch-action:none;z-index:1000}.easy-resize-handle-container-w{cursor:w-resize;left:0;top:50%;transform:translateY(-50%) rotate(270deg)}.easy-resize-handle-container-e{cursor:e-resize;right:0;top:50%;transform:translateY(-50%) rotate(90deg)}.easy-resize-handle-container-n{cursor:n-resize;left:50%;transform:translateX(-50%)}.easy-resize-handle-container-s{bottom:0;cursor:s-resize;left:50%;transform:translateX(-50%) rotate(180deg)}.easy-resize-handle-container-sw{bottom:0;cursor:sw-resize;left:0}.easy-resize-handle-container-nw{cursor:nw-resize;left:0;top:0}.easy-resize-handle-container-ne{cursor:ne-resize;right:0;top:0}.easy-resize-handle-container-se{bottom:0;cursor:se-resize;right:0}.parent-container{display:flex;overflow:visible;position:relative}.parent-inner{height:100%;width:100%}";
 styleInject(css_248z);
 
 class ResizableContainer extends Component {
     constructor(props) {
         super(props);
+        this.handlePointerUp = () => {
+            var _a, _b;
+            if (this.moveHandlerRef) {
+                document.removeEventListener('mousemove', this.moveHandlerRef);
+                document.removeEventListener('touchmove', this.moveHandlerRef);
+                this.moveHandlerRef = null;
+                (_b = (_a = this.props).onChangeFinished) === null || _b === undefined ? undefined : _b.call(_a, this.state.width, this.state.height);
+            }
+        };
         this.state = {
             width: Math.max((props.initialWidth || 200), (props.minWidth || 0)),
             height: Math.max((props.initialHeight || 200), (props.minHeight || 0)),
         };
         this.containerRef = React.createRef();
         this.moveHandlerRef = null;
-        this.handleMouseUp = this.handleMouseUp.bind(this);
-        this.handleMouseMove = this.handleMouseMove.bind(this);
+        this.handlePointerUp = this.handlePointerUp.bind(this);
+        this.handlePointerMove = this.handlePointerMove.bind(this);
     }
     componentDidMount() {
-        document.addEventListener('mouseup', this.handleMouseUp);
+        document.addEventListener('mouseup', this.handlePointerUp);
+        document.addEventListener('touchend', this.handlePointerUp);
     }
     componentWillUnmount() {
-        document.removeEventListener('mouseup', this.handleMouseUp);
+        document.removeEventListener('mouseup', this.handlePointerUp);
+        document.removeEventListener('touchend', this.handlePointerUp);
     }
-    handleMouseUp() {
-        var _a, _b;
-        if (this.moveHandlerRef) {
-            document.removeEventListener('mousemove', this.moveHandlerRef);
-            this.moveHandlerRef = null;
-            (_b = (_a = this.props).onChangeFinished) === null || _b === undefined ? undefined : _b.call(_a, this.state.width, this.state.height);
-        }
-    }
-    handleMouseMove(direction) {
+    handlePointerMove(direction) {
         return (e) => {
             if (!this.containerRef.current) {
                 return;
             }
+            const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+            const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
             const containerRect = this.containerRef.current.getBoundingClientRect();
             let width = this.state.width;
             let height = this.state.height;
             const aspectRatio = width / height;
             switch (direction) {
                 case 'w':
-                    width = Math.max(this.props.minWidth || 200, containerRect.right - e.clientX);
+                    width = Math.max(this.props.minWidth || 200, containerRect.right - clientX);
                     this.props.lockAspectRatio && (height = width / aspectRatio);
                     break;
                 case 'e':
-                    width = Math.max(this.props.minWidth || 200, e.clientX - containerRect.left);
+                    width = Math.max(this.props.minWidth || 200, clientX - containerRect.left);
                     this.props.lockAspectRatio && (height = width / aspectRatio);
                     break;
                 case 'n':
-                    height = Math.max(this.props.minHeight || 200, containerRect.bottom - e.clientY);
+                    height = Math.max(this.props.minHeight || 200, containerRect.bottom - clientY);
                     this.props.lockAspectRatio && (width = height * aspectRatio);
                     break;
                 case 's':
-                    height = Math.max(this.props.minHeight || 200, e.clientY - containerRect.top);
+                    height = Math.max(this.props.minHeight || 200, clientY - containerRect.top);
                     this.props.lockAspectRatio && (width = height * aspectRatio);
                     break;
                 case 'nw':
-                    width = Math.max(this.props.minWidth || 200, containerRect.right - e.clientX);
-                    this.props.lockAspectRatio ? (height = width / aspectRatio) : (height = Math.max(this.props.minHeight || 200, containerRect.bottom - e.clientY));
+                    width = Math.max(this.props.minWidth || 200, containerRect.right - clientX);
+                    this.props.lockAspectRatio ? (height = width / aspectRatio) : (height = Math.max(this.props.minHeight || 200, containerRect.bottom - clientY));
                     break;
                 case 'ne':
-                    width = Math.max(this.props.minWidth || 200, e.clientX - containerRect.left);
-                    this.props.lockAspectRatio ? (height = width / aspectRatio) : (height = Math.max(this.props.minHeight || 200, containerRect.bottom - e.clientY));
+                    width = Math.max(this.props.minWidth || 200, clientX - containerRect.left);
+                    this.props.lockAspectRatio ? (height = width / aspectRatio) : (height = Math.max(this.props.minHeight || 200, containerRect.bottom - clientY));
                     break;
                 case 'sw':
-                    width = Math.max(this.props.minWidth || 200, containerRect.right - e.clientX);
-                    this.props.lockAspectRatio ? (height = width / aspectRatio) : (height = Math.max(this.props.minHeight || 200, e.clientY - containerRect.top));
+                    width = Math.max(this.props.minWidth || 200, containerRect.right - clientX);
+                    this.props.lockAspectRatio ? (height = width / aspectRatio) : (height = Math.max(this.props.minHeight || 200, clientY - containerRect.top));
                     break;
                 case 'se':
-                    width = Math.max(this.props.minWidth || 200, e.clientX - containerRect.left);
-                    this.props.lockAspectRatio ? (height = width / aspectRatio) : (height = Math.max(this.props.minHeight || 200, e.clientY - containerRect.top));
+                    width = Math.max(this.props.minWidth || 200, clientX - containerRect.left);
+                    this.props.lockAspectRatio ? (height = width / aspectRatio) : (height = Math.max(this.props.minHeight || 200, clientY - containerRect.top));
                     break;
             }
             this.setState({ width, height });
         };
     }
     render() {
-        const _a = this.props, { children, resizeHandle, cornerResizeHandle, sx, allowedDirections, minWidth, minHeight, initialWidth, initialHeight, lockAspectRatio, onChangeStarted, onChangeFinished } = _a, other = __rest(_a, ["children", "resizeHandle", "cornerResizeHandle", "sx", "allowedDirections", "minWidth", "minHeight", "initialWidth", "initialHeight", "lockAspectRatio", "onChangeStarted", "onChangeFinished"]);
+        const _a = this.props, { children, resizeHandle, cornerResizeHandle, sx, allowedDirections, className, minWidth, minHeight, initialWidth, initialHeight, lockAspectRatio, onChangeStarted, onChangeFinished } = _a, other = __rest(_a, ["children", "resizeHandle", "cornerResizeHandle", "sx", "allowedDirections", "className", "minWidth", "minHeight", "initialWidth", "initialHeight", "lockAspectRatio", "onChangeStarted", "onChangeFinished"]);
         const { width, height } = this.state;
-        return (React.createElement("div", Object.assign({ ref: this.containerRef, className: 'parent-container', style: Object.assign(Object.assign({}, sx), { width, height }) }, other),
-            children, allowedDirections === null || allowedDirections === undefined ? undefined :
+        return (React.createElement("div", Object.assign({ ref: this.containerRef, className: `parent-container ${className || ''}`, style: Object.assign(Object.assign({}, sx), { width, height }) }, other),
+            React.createElement("div", { className: 'parent-inner' }, children), allowedDirections === null || allowedDirections === undefined ? undefined :
             allowedDirections.map((direction) => {
                 let dynamicCornerHandleStyle = {};
                 if (cornerResizeHandle) {
@@ -162,8 +167,14 @@ class ResizableContainer extends Component {
                 return (React.createElement("div", { key: direction, className: `easy-resize-handle-container easy-resize-handle-container-${direction}`, style: dynamicCornerHandleStyle, onMouseDown: (e) => {
                         var _a, _b;
                         e.preventDefault();
-                        this.moveHandlerRef = this.handleMouseMove(direction);
+                        this.moveHandlerRef = this.handlePointerMove(direction);
                         document.addEventListener('mousemove', this.moveHandlerRef);
+                        (_b = (_a = this.props).onChangeStarted) === null || _b === undefined ? undefined : _b.call(_a, width, height);
+                    }, onTouchStart: (e) => {
+                        var _a, _b;
+                        e.preventDefault();
+                        this.moveHandlerRef = this.handlePointerMove(direction);
+                        document.addEventListener('touchmove', this.moveHandlerRef, { passive: false });
                         (_b = (_a = this.props).onChangeStarted) === null || _b === undefined ? undefined : _b.call(_a, width, height);
                     } }, direction.length > 1 && cornerResizeHandle ? (cornerResizeHandle) : (resizeHandle)));
             })));

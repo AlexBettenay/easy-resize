@@ -8,6 +8,8 @@ export type ResizeDirection = 'n' | 's' | 'w' | 'e' | 'nw' | 'ne' | 'sw' | 'se';
 export interface ResizableContainerProps {
     /** React children to be rendered inside the container */
     children?: ReactNode;
+    /** Custom className to be applied to the container */
+    className?: string;
     /** Array of directions where resize handles should appear
      * @default ['n','s','w','e','nw','ne','sw','se'] */
     allowedDirections?: ResizeDirection[];
@@ -50,7 +52,7 @@ interface ResizableContainerState {
 }
 declare class ResizableContainer extends Component<ResizableContainerProps, ResizableContainerState> {
     containerRef: React.RefObject<HTMLDivElement | null>;
-    moveHandlerRef: ((e: MouseEvent) => void) | null;
+    moveHandlerRef: ((e: MouseEvent | TouchEvent) => void) | null;
     static defaultProps: {
         minWidth: number;
         minHeight: number;
@@ -66,8 +68,8 @@ declare class ResizableContainer extends Component<ResizableContainerProps, Resi
     constructor(props: ResizableContainerProps);
     componentDidMount(): void;
     componentWillUnmount(): void;
-    handleMouseUp(): void;
-    handleMouseMove(direction: ResizeDirection): (e: MouseEvent) => void;
+    handlePointerUp: () => void;
+    handlePointerMove(direction: ResizeDirection): (e: MouseEvent | TouchEvent) => void;
     render(): React.JSX.Element;
 }
 export default ResizableContainer;

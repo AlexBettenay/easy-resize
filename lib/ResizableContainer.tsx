@@ -68,7 +68,7 @@ interface ResizableContainerState {
 
 class ResizableContainer extends Component<ResizableContainerProps, ResizableContainerState> {
   containerRef: React.RefObject<HTMLDivElement|null>;
-  moveHandlerRef: ((e: MouseEvent) => void) | null;
+  moveHandlerRef: ((e: MouseEvent | TouchEvent) => void) | null;
 
   static defaultProps = {
     minWidth: 0,
@@ -91,31 +91,37 @@ class ResizableContainer extends Component<ResizableContainerProps, ResizableCon
     };
     this.containerRef = React.createRef();
     this.moveHandlerRef = null;
-    this.handleMouseUp = this.handleMouseUp.bind(this);
-    this.handleMouseMove = this.handleMouseMove.bind(this);
+    this.handlePointerUp = this.handlePointerUp.bind(this);
+    this.handlePointerMove = this.handlePointerMove.bind(this);
   }
 
   componentDidMount() {
-    document.addEventListener('mouseup', this.handleMouseUp);
+    document.addEventListener('mouseup', this.handlePointerUp);
+    document.addEventListener('touchend', this.handlePointerUp);
   }
 
   componentWillUnmount() {
-    document.removeEventListener('mouseup', this.handleMouseUp);
+    document.removeEventListener('mouseup', this.handlePointerUp);
+    document.removeEventListener('touchend', this.handlePointerUp);
   }
 
-  handleMouseUp() {
+  handlePointerUp = () => {
     if (this.moveHandlerRef) {
       document.removeEventListener('mousemove', this.moveHandlerRef);
+      document.removeEventListener('touchmove', this.moveHandlerRef);
       this.moveHandlerRef = null;
       this.props.onChangeFinished?.(this.state.width, this.state.height);
     }
   }
 
-  handleMouseMove(direction: ResizeDirection) {
-    return (e: MouseEvent) => {
+  handlePointerMove(direction: ResizeDirection) {
+    return (e: MouseEvent | TouchEvent) => {
       if (!this.containerRef.current) {
         return;
       }
+
+      const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+      const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
 
       const containerRect = this.containerRef.current.getBoundingClientRect();
 
@@ -125,36 +131,36 @@ class ResizableContainer extends Component<ResizableContainerProps, ResizableCon
 
       switch (direction) {
         case 'w':
-          width = Math.max(this.props.minWidth || 200, containerRect.right - e.clientX)
+          width = Math.max(this.props.minWidth || 200, containerRect.right - clientX)
           this.props.lockAspectRatio && (height = width / aspectRatio);
           break;
         case 'e':
-          width = Math.max(this.props.minWidth || 200, e.clientX - containerRect.left);
+          width = Math.max(this.props.minWidth || 200, clientX - containerRect.left);
           this.props.lockAspectRatio && (height = width / aspectRatio);
           break;
         case 'n':
-          height = Math.max(this.props.minHeight || 200, containerRect.bottom - e.clientY);
+          height = Math.max(this.props.minHeight || 200, containerRect.bottom - clientY);
           this.props.lockAspectRatio && (width = height * aspectRatio);
           break;
         case 's':
-          height = Math.max(this.props.minHeight || 200, e.clientY - containerRect.top);
+          height = Math.max(this.props.minHeight || 200, clientY - containerRect.top);
           this.props.lockAspectRatio && (width = height * aspectRatio);
           break;
         case 'nw':
-          width = Math.max(this.props.minWidth || 200, containerRect.right - e.clientX)
-          this.props.lockAspectRatio ? (height = width / aspectRatio):(height = Math.max(this.props.minHeight || 200, containerRect.bottom - e.clientY));
+          width = Math.max(this.props.minWidth || 200, containerRect.right - clientX)
+          this.props.lockAspectRatio ? (height = width / aspectRatio):(height = Math.max(this.props.minHeight || 200, containerRect.bottom - clientY));
           break;
         case 'ne':
-          width = Math.max(this.props.minWidth || 200, e.clientX - containerRect.left);
-          this.props.lockAspectRatio ? (height = width / aspectRatio):(height = Math.max(this.props.minHeight || 200, containerRect.bottom - e.clientY));
+          width = Math.max(this.props.minWidth || 200, clientX - containerRect.left);
+          this.props.lockAspectRatio ? (height = width / aspectRatio):(height = Math.max(this.props.minHeight || 200, containerRect.bottom - clientY));
           break;
         case 'sw':
-          width = Math.max(this.props.minWidth || 200, containerRect.right - e.clientX);
-          this.props.lockAspectRatio ? (height = width / aspectRatio):(height= Math.max(this.props.minHeight || 200, e.clientY - containerRect.top));
+          width = Math.max(this.props.minWidth || 200, containerRect.right - clientX);
+          this.props.lockAspectRatio ? (height = width / aspectRatio):(height= Math.max(this.props.minHeight || 200, clientY - containerRect.top));
           break;
         case 'se':
-          width = Math.max(this.props.minWidth || 200, e.clientX - containerRect.left);
-          this.props.lockAspectRatio ? (height = width / aspectRatio):(height = Math.max(this.props.minHeight || 200, e.clientY - containerRect.top));
+          width = Math.max(this.props.minWidth || 200, clientX - containerRect.left);
+          this.props.lockAspectRatio ? (height = width / aspectRatio):(height = Math.max(this.props.minHeight || 200, clientY - containerRect.top));
           break;
         default:
           break;
@@ -206,9 +212,16 @@ class ResizableContainer extends Component<ResizableContainerProps, ResizableCon
               style={dynamicCornerHandleStyle}
               onMouseDown={(e) => {
                 e.preventDefault();
-                this.moveHandlerRef = this.handleMouseMove(direction);
+                this.moveHandlerRef = this.handlePointerMove(direction);
                 document.addEventListener('mousemove', this.moveHandlerRef);
                 this.props.onChangeStarted?.(width, height)
+              }}
+              onTouchStart={(e) => {
+                e.preventDefault();
+                this.moveHandlerRef = this.handlePointerMove(direction);
+                document.addEventListener('touchmove', this.moveHandlerRef as (e: TouchEvent) => void, 
+                  { passive: false });
+                this.props.onChangeStarted?.(width, height);
               }}
             >
               {direction.length > 1 && cornerResizeHandle ? (

@@ -3,6 +3,7 @@
     display: flex;
     overflow: visible;
     z-index: 1000;
+    touch-action: none;
 }
 
 .easy-resize-handle-container-w {
