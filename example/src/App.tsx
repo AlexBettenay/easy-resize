@@ -7,7 +7,7 @@ function App() {
     <div className='app-container'>
       <ResizableContainer className='resizable-container'>
         <img 
-          src="/Camface.jpg" 
+          src="/easy-resize/Camface.jpg" 
           alt="Description of image"
           style={{ width: '100%', height: '100%', objectFit: 'fill' }}
         />
