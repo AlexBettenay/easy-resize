@@ -9,26 +9,27 @@
     top: 50%;
     left: 0;
     cursor: w-resize;
-    transform: rotate(270deg);
+    transform: translateY(-50%) rotate(270deg);
 }
 
 .easy-resize-handle-container-e {
     top: 50%;
     right: 0;
     cursor: e-resize;
-    transform: rotate(90deg);
+    transform: translateY(-50%) rotate(90deg);
 }
 
 .easy-resize-handle-container-n {
     left: 50%;
     cursor: n-resize;
+    transform: translateX(-50%);
 }
 
 .easy-resize-handle-container-s {
     left: 50%;
     bottom: 0;
     cursor: s-resize;
-    transform: rotate(180deg);
+    transform: translateX(-50%) rotate(180deg);
 }
 
 .easy-resize-handle-container-sw {
@@ -59,4 +60,9 @@
     display: flex;
     position: relative;
     overflow: visible;
+}
+
+.parent-inner {
+    width: 100%;
+    height: 100%;
 }

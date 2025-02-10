@@ -67,7 +67,7 @@ import ResizableContainer from 'easy-resize'
 </ResizableContainer>
 ```
 
-### Using Custome Resize Handles
+### Using Custom Resize Handles
 
 - You can specify custom resize handles.
 - There is a basic resize handle option, and a corner resize handle option, if only the basic resize handle is defined then this will also be used for the corners.

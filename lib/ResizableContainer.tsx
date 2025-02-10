@@ -10,6 +10,9 @@ export type ResizeDirection = 'n' | 's' | 'w' | 'e' | 'nw' | 'ne' | 'sw' | 'se';
 export interface ResizableContainerProps {
   /** React children to be rendered inside the container */
   children?: ReactNode;
+
+  /** Custom className to be applied to the container */
+  className?: string;
   
   /** Array of directions where resize handles should appear
    * @default ['n','s','w','e','nw','ne','sw','se'] */
@@ -162,17 +165,19 @@ class ResizableContainer extends Component<ResizableContainerProps, ResizableCon
   }
 
   render() {
-    const { children, resizeHandle, cornerResizeHandle, sx, allowedDirections, minWidth, minHeight, initialWidth, initialHeight, lockAspectRatio, onChangeStarted, onChangeFinished, ...other } = this.props;
+    const { children, resizeHandle, cornerResizeHandle, sx, allowedDirections, className, minWidth, minHeight, initialWidth, initialHeight, lockAspectRatio, onChangeStarted, onChangeFinished, ...other } = this.props;
     const { width, height } = this.state;
 
     return (
       <div
         ref={this.containerRef}
-        className='parent-container'
+        className={`parent-container ${className || ''}`}
         style={{ ...sx, width, height }}
         {...other}
       >
-        {children}
+        <div className='parent-inner'>
+          {children}
+        </div>
         {allowedDirections?.map((direction) => {
           let dynamicCornerHandleStyle: CSSProperties = {};
           if (cornerResizeHandle) {
